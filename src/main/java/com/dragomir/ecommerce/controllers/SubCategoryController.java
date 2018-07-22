@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/subcategory")
 public class SubCategoryController {
+
     @Autowired
     private SubCategoryService subCategoryService;
 
