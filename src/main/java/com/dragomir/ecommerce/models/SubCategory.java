@@ -1,10 +1,14 @@
 package com.dragomir.ecommerce.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 
 @Entity
 public class SubCategory {
@@ -13,19 +17,24 @@ public class SubCategory {
     private Long id;
     private String name;
 
-    public SubCategory() {
-    }
-
-    public SubCategory(String name, Category category) {
-        this.name = name;
-        this.category = category;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
     @JsonBackReference
     private Category category;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "subCategory")
+    @JsonIgnore
+    private List<Product> products;
+
+    public SubCategory() {
+    }
+
+    public SubCategory(String name, Category category, List<Product> products) {
+        this.name = name;
+        this.category = category;
+        this.products = products;
+    }
 
     public Long getId() {
         return id;
@@ -49,5 +58,13 @@ public class SubCategory {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

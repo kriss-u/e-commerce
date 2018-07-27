@@ -1,0 +1,86 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection).
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+POST http://localhost:8080/api/categories
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": null,
+  "name": "TVs, Audio & Cameras",
+  "iconName": "mdi-television"
+}
+###
+POST http://localhost:8080/api/subCategories
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": null,
+  "name": "Televisions",
+  "category": "http://localhost:8080/api/categories/56"
+}
+###
+PUT http://localhost:8080/api/categories/56
+POST http://localhost:8080/subcategory
+Content-Type: application/json
+
+{
+  "id": null,
+  "name": "Laptops",
+  "category": {
+    "id": 4
+  }
+}
+
+###
+POST http://localhost:8080/api/brands
+Content-Type: application/json
+
+{
+
+}
+
+###
+
+POST http://localhost:8080/api/products
+Content-Type: application/json
+Accept: application/json
+
+{
+  "id": null,
+    "name": "Iphone",
+    "model": "8",
+    "cost": 90000,
+    "description": "This is Iphone 8",
+    "specifications": "Very Good not than plus",
+    "brand": "http://localhost:8080/api/brands/36",
+    "subCategory": "http://localhost:8080/api/subCategories/23"
+}
+
+###
+
+POST http://localhost:8080/test/onemany
+Content-Type: application/json
+
+{
+  "id": null,
+  "name": "SecondOneMany"
+}
+###
+
+POST http://localhost:8080/test/manyone
+Content-Type: application/json
+
+{
+  "id": null,
+  "name": "FourthManyOne",
+  "oneMany": {
+    "id": 51
+  }
+}
+
+###

@@ -1,0 +1,35 @@
+package com.dragomir.ecommerce.controllers;
+
+import com.dragomir.ecommerce.models.Product;
+import com.dragomir.ecommerce.services.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/product")
+public class ProductController {
+    @Autowired
+    private ProductService productService;
+
+    @GetMapping
+    public @ResponseBody
+    Iterable<Product> getAllProducts() {
+        return productService.getAllProducts();
+    }
+
+    @GetMapping("/{productId}")
+    public @ResponseBody
+    Product getProduct(@PathVariable Long productId) {
+        return productService.getProduct(productId);
+    }
+
+    @PostMapping
+    public void addProduct(@RequestBody Product product) {
+        productService.addProduct(product);
+    }
+
+    @DeleteMapping("/{productId}")
+    public void deleteProduct(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+    }
+}

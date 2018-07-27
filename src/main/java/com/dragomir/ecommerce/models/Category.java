@@ -1,9 +1,11 @@
 package com.dragomir.ecommerce.models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
+import org.json.simple.JSONObject;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,18 +17,17 @@ public class Category {
     private String name;
     private String iconName;
 
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            mappedBy = "category")
-    private Set<SubCategory> subCategories = new HashSet<>();
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @JsonManagedReference
+    private List<SubCategory> subCategories;
 
     public Category() {
     }
 
-    public Category(String name, String iconName) {
+    public Category(String name, String iconName, List<SubCategory> subCategories) {
         this.name = name;
         this.iconName = iconName;
+        this.subCategories = subCategories;
     }
 
     public Long getId() {
@@ -53,11 +54,11 @@ public class Category {
         this.iconName = iconName;
     }
 
-    public Set<SubCategory> getSubCategories() {
+    public List<SubCategory> getSubCategories() {
         return subCategories;
     }
 
-    public void setSubCategories(Set<SubCategory> subCategories) {
+    public void setSubCategories(List<SubCategory> subCategories) {
         this.subCategories = subCategories;
     }
 }
