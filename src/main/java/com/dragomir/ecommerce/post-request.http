@@ -24,7 +24,7 @@ Accept: application/json
   "category": "http://localhost:8080/api/categories/56"
 }
 ###
-PUT http://localhost:8080/api/categories/56
+
 POST http://localhost:8080/subcategory
 Content-Type: application/json
 
