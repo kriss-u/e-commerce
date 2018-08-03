@@ -1,0 +1,69 @@
+package com.dragomir.ecommerce.models;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import javax.persistence.*;
+import java.math.BigDecimal;
+import java.util.List;
+
+@Entity
+public class UserOrder {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private BigDecimal amount;
+
+    @ManyToOne
+    @OnDelete(action = OnDeleteAction.NO_ACTION)
+    private User user;
+
+    @OneToMany(mappedBy = "userOrder", targetEntity = OrderedProduct.class)
+    private List<OrderedProduct> orderedProducts;
+
+    public UserOrder() {
+    }
+
+    public UserOrder(BigDecimal amount, User user, List<OrderedProduct> orderedProducts) {
+        this.amount = amount;
+        this.user = user;
+        this.orderedProducts = orderedProducts;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public List<OrderedProduct> getOrderedProducts() {
+        return orderedProducts;
+    }
+
+    public void setOrderedProducts(List<OrderedProduct> orderedProducts) {
+        this.orderedProducts = orderedProducts;
+    }
+
+    public void addOrderedProducts(OrderedProduct orderedProduct) {
+        this.orderedProducts.add(orderedProduct);
+    }
+}

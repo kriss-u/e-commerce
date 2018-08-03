@@ -35,7 +35,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-mail')
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
-    //compile('org.springframework.boot:spring-boot-starter-security')
+    compile('org.springframework.boot:spring-boot-starter-security')
     compile('io.jsonwebtoken:jjwt:0.9.1')
     compile('de.codecentric:spring-boot-admin-starter-client')
     compile('de.codecentric:spring-boot-admin-starter-server')

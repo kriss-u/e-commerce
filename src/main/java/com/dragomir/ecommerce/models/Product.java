@@ -1,13 +1,12 @@
 package com.dragomir.ecommerce.models;
 
-import com.fasterxml.jackson.annotation.*;
-import org.hibernate.annotations.ColumnDefault;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Currency;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -20,13 +19,11 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @JsonBackReference
     private Brand brand;
 
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
-    @JsonBackReference
     private SubCategory subCategory;
 
     private String model;
@@ -41,10 +38,20 @@ public class Product {
 
     private Integer inventory;
 
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "product", targetEntity = Cart.class)
+    @JsonIgnore
+    private List<Cart> carts;
+
+    @OneToMany(mappedBy = "product", targetEntity = OrderedProduct.class)
+    private List<OrderedProduct> orderedProducts;
+
+    private String status;
+
     public Product() {
     }
 
-    public Product(String name, Brand brand, SubCategory subCategory, String model, BigDecimal cost, String description, String specifications, Integer inventory) {
+    public Product(String name, Brand brand, SubCategory subCategory, String model, BigDecimal cost, String description, String specifications, Integer inventory, List<Cart> carts, List<OrderedProduct> orderedProducts, String status) {
         this.name = name;
         this.brand = brand;
         this.subCategory = subCategory;
@@ -53,6 +60,9 @@ public class Product {
         this.description = description;
         this.specifications = specifications;
         this.inventory = inventory;
+        this.carts = carts;
+        this.orderedProducts = orderedProducts;
+        this.status = status;
     }
 
     public Long getId() {
@@ -125,5 +135,33 @@ public class Product {
 
     public void setInventory(Integer inventory) {
         this.inventory = inventory;
+    }
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<OrderedProduct> getOrderedProducts() {
+        return orderedProducts;
+    }
+
+    public void setOrderedProducts(List<OrderedProduct> orderedProducts) {
+        this.orderedProducts = orderedProducts;
+    }
+
+    public void addOrderedProducts(OrderedProduct orderedProduct) {
+        this.orderedProducts.add(orderedProduct);
     }
 }

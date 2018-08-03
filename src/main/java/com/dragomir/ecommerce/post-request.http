@@ -86,15 +86,14 @@ Content-Type: application/json
 }
 ###
 
-POST http://localhost:8080/test/manyone
+POST http://localhost:8080/login
 Content-Type: application/json
+Accept: application/json
 
 {
-  "id": null,
-  "name": "FourthManyOne",
-  "oneMany": {
-    "id": 51
-  }
+"username": "kriss",
+  "password": "kriss2758"
 }
+
 
 ###
