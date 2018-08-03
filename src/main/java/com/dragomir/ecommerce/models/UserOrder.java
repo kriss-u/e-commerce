@@ -1,10 +1,12 @@
 package com.dragomir.ecommerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,12 +19,17 @@ public class UserOrder {
 
     @ManyToOne
     @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "userOrder", targetEntity = OrderedProduct.class)
+    @OneToMany(mappedBy = "userOrder", targetEntity = OrderedProduct.class, cascade = CascadeType.ALL)
     private List<OrderedProduct> orderedProducts;
 
     public UserOrder() {
+    }
+
+    public UserOrder(User user) {
+        this.user = user;
     }
 
     public UserOrder(BigDecimal amount, User user, List<OrderedProduct> orderedProducts) {
@@ -56,14 +63,15 @@ public class UserOrder {
     }
 
     public List<OrderedProduct> getOrderedProducts() {
-        return orderedProducts;
+        List<OrderedProduct> orderedProduct = new ArrayList<>();
+        return orderedProducts == null ? orderedProduct : orderedProducts;
     }
 
     public void setOrderedProducts(List<OrderedProduct> orderedProducts) {
         this.orderedProducts = orderedProducts;
     }
 
-    public void addOrderedProducts(OrderedProduct orderedProduct) {
+    public void addOrderedProduct(OrderedProduct orderedProduct) {
         this.orderedProducts.add(orderedProduct);
     }
 }

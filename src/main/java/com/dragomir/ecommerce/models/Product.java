@@ -43,7 +43,7 @@ public class Product {
     @JsonIgnore
     private List<Cart> carts;
 
-    @OneToMany(mappedBy = "product", targetEntity = OrderedProduct.class)
+    @OneToMany(mappedBy = "product", targetEntity = OrderedProduct.class, cascade = CascadeType.ALL)
     private List<OrderedProduct> orderedProducts;
 
     private String status;

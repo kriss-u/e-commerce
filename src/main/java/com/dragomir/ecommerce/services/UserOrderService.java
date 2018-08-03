@@ -2,17 +2,23 @@ package com.dragomir.ecommerce.services;
 
 
 import com.dragomir.ecommerce.models.*;
-import com.dragomir.ecommerce.repositories.CartRepository;
-import com.dragomir.ecommerce.repositories.ProductRepository;
-import com.dragomir.ecommerce.repositories.UserOrderRepository;
-import com.dragomir.ecommerce.repositories.UserRepository;
+import com.dragomir.ecommerce.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserOrderService {
+    @PersistenceContext
+    EntityManager em;
     @Autowired
     private UserOrderRepository userOrderRepository;
 
@@ -24,6 +30,9 @@ public class UserOrderService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private OrderedProductRepository orderedProductRepository;
 
     public void addToCart(Long productId, Long userId, Integer quantity) {
         Cart cart = cartRepository.findCartByUser_IdAndProduct_Id(userId, productId);
@@ -46,21 +55,41 @@ public class UserOrderService {
     public void deleteCartItem(Long userId, Long productId) {
         cartRepository.deleteByUser_IdAndProduct_Id(userId, productId);
     }
+    @Transactional
+    public void confirmOrder(Long userId) {
+        User user = userRepository.findUserById(userId);
 
-    public void checkoutItems(Long userId) {
-        UserOrder userOrder = new UserOrder();
         List<Cart> carts = cartRepository.findAllByUser_Id(userId);
-        if (carts == null)
-            return;
+
+        UserOrder userOrder = new UserOrder(user);
+        userOrder.setAmount(new BigDecimal("0"));
+
         carts.forEach(cart -> {
-            Product product = cart.getProduct();
             OrderedProduct orderedProduct = new OrderedProduct();
+
+            Product product = cart.getProduct();
+
             orderedProduct.setUserOrder(userOrder);
+
             orderedProduct.setProduct(product);
-            orderedProduct.setCost(product.getCost());
             orderedProduct.setQuantity(cart.getQuantity());
-            userOrder.addOrderedProducts(orderedProduct);
+
+            orderedProduct.setCost(product.getCost());
+            userOrder.setAmount(userOrder.getAmount().add(product.getCost().multiply(new BigDecimal(cart.getQuantity()))));
+
+            em.persist(orderedProduct);
+
+            userOrder.getOrderedProducts().add(orderedProduct);
         });
+        userOrderRepository.save(userOrder);
         deleteAllCartItems(userId);
+    }
+
+    public void confirmSingleOrder(Cart cart) {
+
+    }
+
+    public List<Cart> getAllCartByUser(Long userId) {
+        return cartRepository.findAllByUser_Id(userId);
     }
 }

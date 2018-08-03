@@ -1,6 +1,7 @@
 package com.dragomir.ecommerce.repositories;
 
 import com.dragomir.ecommerce.models.User;
+import io.micrometer.core.lang.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Boolean existsUserByUsername(@Param(value = "username") String username);
     Boolean existsUserByEmail(@Param(value = "email") String email);
     User findByEmail(@Param(value = "email") String email);
-
     User findUserById(@Param(value = "id") Long userId);
 }

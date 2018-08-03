@@ -1,5 +1,6 @@
 package com.dragomir.ecommerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -13,10 +14,12 @@ public class Cart {
     private Long id;
 
     @ManyToOne
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Product product;
 

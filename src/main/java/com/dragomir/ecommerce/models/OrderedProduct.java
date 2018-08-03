@@ -1,5 +1,8 @@
 package com.dragomir.ecommerce.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -7,7 +10,7 @@ import java.math.BigDecimal;
 public class OrderedProduct {
 
     @EmbeddedId
-    private OrderedProductId id;
+    private OrderedProductId id = new OrderedProductId();
 
     @ManyToOne
     @MapsId("orderId")
