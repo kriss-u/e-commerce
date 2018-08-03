@@ -50,6 +50,8 @@ public class UserOrderService {
     public void checkoutItems(Long userId) {
         UserOrder userOrder = new UserOrder();
         List<Cart> carts = cartRepository.findAllByUser_Id(userId);
+        if (carts == null)
+            return;
         carts.forEach(cart -> {
             Product product = cart.getProduct();
             OrderedProduct orderedProduct = new OrderedProduct();
