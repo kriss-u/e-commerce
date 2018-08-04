@@ -18,13 +18,23 @@ public interface CartRepository extends JpaRepository<Cart, Long> {
 
     Cart findCartByUser_IdAndProduct_Id(@Param("userId") Long userId, @Param("productId") Long productId);
 
+    Cart findCartByUser_UsernameAndProduct_Id(@Param("username") String username, @Param("productId") Long productId);
+
     @Transactional
     void deleteAllByUser_Id(@Param("userId") Long userId);
+
+    @Transactional
+    void deleteAllByUser_Username(@Param("username") String username);
+
+    @Transactional
+    void deleteByUser_UsernameAndProduct_Id(@Param("username") String username, @Param("productId") Long productId);
 
     @Transactional
     void deleteByUser_IdAndProduct_Id(@Param("userId") Long userId, @Param("productId") Long productId);
 
     List<Cart> findAllByUser_Id(@Param("userId") Long userId);
+
+    List<Cart> findAllByUser_Username(@Param("username") String username);
 
     List<Cart> findAllByUser(@Param("user") User user);
 }

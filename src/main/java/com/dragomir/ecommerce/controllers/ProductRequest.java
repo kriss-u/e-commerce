@@ -2,15 +2,15 @@ package com.dragomir.ecommerce.controllers;
 
 public class ProductRequest {
     private Long productId;
-    private Long userId;
+    private String username;
     private Integer quantity;
 
     public ProductRequest() {
     }
 
-    public ProductRequest(Long productId, Long userId, Integer quantity) {
+    public ProductRequest(Long productId, String username, Integer quantity) {
         this.productId = productId;
-        this.userId = userId;
+        this.username = username;
         this.quantity = quantity;
     }
 
@@ -22,12 +22,12 @@ public class ProductRequest {
         this.productId = productId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Integer getQuantity() {

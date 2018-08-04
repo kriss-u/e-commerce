@@ -1,6 +1,7 @@
 package com.dragomir.ecommerce.services;
 
 
+import com.dragomir.ecommerce.controllers.ProductRequest;
 import com.dragomir.ecommerce.models.*;
 import com.dragomir.ecommerce.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserOrderService {
@@ -34,10 +33,10 @@ public class UserOrderService {
     @Autowired
     private OrderedProductRepository orderedProductRepository;
 
-    public void addToCart(Long productId, Long userId, Integer quantity) {
-        Cart cart = cartRepository.findCartByUser_IdAndProduct_Id(userId, productId);
+    public void addToCart(Long productId, String username, Integer quantity) {
+        Cart cart = cartRepository.findCartByUser_UsernameAndProduct_Id(username, productId);
         Product product = productRepository.findProductById(productId);
-        User user = userRepository.findUserById(userId);
+        User user = userRepository.findByUsername(username);
         if (product == null || user == null)
             return;
         if (cart == null)
@@ -48,18 +47,37 @@ public class UserOrderService {
         cartRepository.save(cart);
     }
 
-    public void deleteAllCartItems(Long userId) {
-        cartRepository.deleteAllByUser_Id(userId);
+    public void addToCartInBatch() {
+
     }
 
-    public void deleteCartItem(Long userId, Long productId) {
-        cartRepository.deleteByUser_IdAndProduct_Id(userId, productId);
+    public List<ProductRequest> getAllCartItemsByUser(String username) {
+        List<ProductRequest> cartItems = new ArrayList<>();
+        cartRepository.findAllByUser_Username(username).forEach(cart -> {
+            ProductRequest productRequest = new ProductRequest();
+            productRequest.setProductId(cart.getProduct().getId());
+            productRequest.setUsername(username);
+            productRequest.setQuantity(cart.getQuantity());
+            cartItems.add(productRequest);
+        });
+        return cartItems;
     }
+
+    public void deleteAllCartItems(String username) {
+        cartRepository.deleteAllByUser_Username(username);
+    }
+
+    public void deleteCartItem(String username, Long productId) {
+        cartRepository.deleteByUser_UsernameAndProduct_Id(username, productId);
+    }
+
     @Transactional
-    public void confirmOrder(Long userId) {
-        User user = userRepository.findUserById(userId);
+    public void confirmOrder(String username) {
+        User user = userRepository.findByUsername(username);
 
-        List<Cart> carts = cartRepository.findAllByUser_Id(userId);
+        if (user == null) return;
+
+        List<Cart> carts = cartRepository.findAllByUser_Username(username);
 
         UserOrder userOrder = new UserOrder(user);
         userOrder.setAmount(new BigDecimal("0"));
@@ -78,18 +96,22 @@ public class UserOrderService {
             userOrder.setAmount(userOrder.getAmount().add(product.getCost().multiply(new BigDecimal(cart.getQuantity()))));
 
             em.persist(orderedProduct);
-
             userOrder.getOrderedProducts().add(orderedProduct);
+
+            product.decreaseInventory();
+            productRepository.save(product);
+
         });
+
         userOrderRepository.save(userOrder);
-        deleteAllCartItems(userId);
+        deleteAllCartItems(username);
     }
 
     public void confirmSingleOrder(Cart cart) {
 
     }
 
-    public List<Cart> getAllCartByUser(Long userId) {
-        return cartRepository.findAllByUser_Id(userId);
+    public List<Cart> getAllCartByUser(String username) {
+        return cartRepository.findAllByUser_Username(username);
     }
 }

@@ -17,16 +17,21 @@ public class UserOrderController {
 
     @PostMapping("/addToCart")
     public void addToCart(@RequestBody ProductRequest productRequest) {
-        userOrderService.addToCart(productRequest.getProductId(), productRequest.getUserId(), productRequest.getQuantity());
+        userOrderService.addToCart(productRequest.getProductId(), productRequest.getUsername(), productRequest.getQuantity());
     }
 
-    @GetMapping("/confirmOrder/{userId}")
-    public void confirmOrder(@PathVariable("userId") Long userId) {
-        userOrderService.confirmOrder(userId);
+    @GetMapping("/cartItem/{username}")
+    @ResponseBody public List<ProductRequest> getAllCartItemsByUser(@PathVariable("username") String username) {
+        return userOrderService.getAllCartItemsByUser(username);
     }
 
-    @GetMapping("/getAllCartByUser/{userId}")
-    @ResponseBody public List<Cart> getAllCartByUser(@PathVariable("userId") Long userId) {
-        return userOrderService.getAllCartByUser(userId);
+    @GetMapping("/confirmOrder/{username}")
+    public void confirmOrder(@PathVariable("username") String username) {
+        userOrderService.confirmOrder(username);
+    }
+
+    @GetMapping("/getAllCartByUser/{username}")
+    @ResponseBody public List<Cart> getAllCartByUser(@PathVariable("username") String username) {
+        return userOrderService.getAllCartByUser(username);
     }
 }

@@ -164,4 +164,11 @@ public class Product {
     public void addOrderedProducts(OrderedProduct orderedProduct) {
         this.orderedProducts.add(orderedProduct);
     }
+
+    public void decreaseInventory() {
+        --this.inventory;
+    }
+    public void addInventory(Integer quantity) {
+        this.inventory += quantity;
+    }
 }
