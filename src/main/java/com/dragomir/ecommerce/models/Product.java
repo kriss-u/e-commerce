@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import org.springframework.data.elasticsearch.annotations.Document;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -165,3 +167,4 @@ public class Product {
         this.orderedProducts.add(orderedProduct);
     }
 }
+
