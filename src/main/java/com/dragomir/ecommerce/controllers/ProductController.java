@@ -5,6 +5,14 @@ import com.dragomir.ecommerce.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import com.dragomir.ecommerce.models.Book;
+import com.dragomir.ecommerce.services.BookService;
+import org.elasticsearch.client.Client;
+
+
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
