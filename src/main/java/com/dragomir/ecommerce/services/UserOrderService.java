@@ -110,7 +110,15 @@ public class UserOrderService {
     public void confirmSingleOrder(Cart cart) {
 
     }
-
+    public List<Product> getAllCartProducts(String username) {
+        List<Cart> carts = cartRepository.findAllByUser_Username(username);
+        List<Product> products = new ArrayList<>();
+        carts.forEach(cart -> {
+            Product product = cart.getProduct();
+            products.add(product);
+        });
+        return products;
+    }
     public List<Cart> getAllCartByUser(String username) {
         return cartRepository.findAllByUser_Username(username);
     }

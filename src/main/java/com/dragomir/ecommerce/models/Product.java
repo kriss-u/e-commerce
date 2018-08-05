@@ -21,11 +21,13 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "brand_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JsonIgnore
     private Brand brand;
 
     @ManyToOne
     @JoinColumn(name = "sub_category_id")
     @OnDelete(action = OnDeleteAction.NO_ACTION)
+    @JsonIgnore
     private SubCategory subCategory;
 
     private String model;
@@ -46,6 +48,7 @@ public class Product {
     private List<Cart> carts;
 
     @OneToMany(mappedBy = "product", targetEntity = OrderedProduct.class, cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<OrderedProduct> orderedProducts;
 
     private String status;
